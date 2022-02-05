@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace CloudBruh.Trustartup.GlobalRating.Models;
+namespace CloudBruh.Trustartup.GlobalRating.Models.RawDtos;
 
 public record StartupRawDto(string Name, string Description) : IIdentifiable
 {
