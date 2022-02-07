@@ -28,6 +28,6 @@ public record StartupRawDto(string Name, string Description) : IIdentifiable
     [JsonPropertyName("updatedAt")]
     public DateTime UpdatedAt { get; init; }
     
-    [JsonPropertyName("createdAt    ")]
+    [JsonPropertyName("createdAt")]
     public DateTime CreatedAt { get; init; }
 }

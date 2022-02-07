@@ -13,7 +13,7 @@ public class Retriever
         _feedContentSystemUrl = feedContentSystemUrl;
     }
     
-    public async Task<IReadOnlyDictionary<long, StartupRawDto>> GetStartups()
+    public async Task<IReadOnlyList<StartupRawDto>> GetStartups()
     {
         using var client = new HttpClient();
 
@@ -22,7 +22,7 @@ public class Retriever
         return await DeserializeInput<StartupRawDto>(await response);
     }
     
-    public async Task<IReadOnlyDictionary<long, PostRawDto>> GetPosts()
+    public async Task<IReadOnlyList<PostRawDto>> GetPosts()
     {
         using var client = new HttpClient();
 
@@ -31,7 +31,7 @@ public class Retriever
         return await DeserializeInput<PostRawDto>(await response);
     }
     
-    public async Task<IReadOnlyDictionary<long, CommentRawDto>> GetComments()
+    public async Task<IReadOnlyList<CommentRawDto>> GetComments()
     {
         using var client = new HttpClient();
 
@@ -40,7 +40,7 @@ public class Retriever
         return await DeserializeInput<CommentRawDto>(await response);
     }
     
-    public async Task<IReadOnlyDictionary<long, FollowRawDto>> GetFollows()
+    public async Task<IReadOnlyList<FollowRawDto>> GetFollows()
     {
         using var client = new HttpClient();
 
@@ -49,7 +49,7 @@ public class Retriever
         return await DeserializeInput<FollowRawDto>(await response);
     }
     
-    public async Task<IReadOnlyDictionary<long, LikeRawDto>> GetLikes()
+    public async Task<IReadOnlyList<LikeRawDto>> GetLikes()
     {
         using var client = new HttpClient();
 
@@ -58,9 +58,8 @@ public class Retriever
         return await DeserializeInput<LikeRawDto>(await response);
     }
 
-    private static async Task<IReadOnlyDictionary<long, T>> DeserializeInput<T>(Stream response) where T : IIdentifiable
+    private static async Task<IReadOnlyList<T>> DeserializeInput<T>(Stream response) where T : IIdentifiable
     {
-        IEnumerable<T> enumerable = await JsonSerializer.DeserializeAsync<IEnumerable<T>>(response) ?? Array.Empty<T>();
-        return new Dictionary<long, T>(enumerable.Select(item => new KeyValuePair<long, T>(item.Id, item)));
+        return (await JsonSerializer.DeserializeAsync<IEnumerable<T>>(response))?.ToList() ?? new List<T>();
     }
 }
