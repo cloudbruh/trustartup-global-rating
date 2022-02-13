@@ -1,5 +1,4 @@
-﻿using System.Net.Http.Json;
-using CloudBruh.Trustartup.GlobalRating;
+﻿using CloudBruh.Trustartup.GlobalRating;
 using CloudBruh.Trustartup.GlobalRating.Models;
 using CloudBruh.Trustartup.GlobalRating.Models.RawDtos;
 using Microsoft.Extensions.Configuration;
@@ -22,14 +21,8 @@ IReadOnlyList<LikeRawDto> likes = await retriever.GetLikes();
 
 List<Startup> result = new Converter(startups, posts, comments, likes, follows).GetConvertedStartups().ToList();
 
-// string serialized = JsonSerializer.Serialize(result[0], new JsonSerializerOptions() {WriteIndented = true});
-// Console.WriteLine(serialized);
+var worker = new RatingWorker(ratingCalculationSystemUrl, new Updater(feedContentSystemUrl));
 
-using (var client = new HttpClient())
-{
-    HttpResponseMessage ratingResult = await client.PostAsJsonAsync($"{ratingCalculationSystemUrl}/global", result[0]);
-
-    Console.WriteLine(await ratingResult.Content.ReadAsStringAsync());
-}
+await worker.Run(result);
 
 Console.WriteLine("Done");

@@ -8,6 +8,11 @@ public class Retriever
 {
     private readonly string _feedContentSystemUrl;
 
+    private static readonly JsonSerializerOptions SerializerOptions = new()
+    {
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+    };
+
     public Retriever(string feedContentSystemUrl)
     {
         _feedContentSystemUrl = feedContentSystemUrl;
@@ -60,6 +65,7 @@ public class Retriever
 
     private static async Task<IReadOnlyList<T>> DeserializeInput<T>(Stream response) where T : IIdentifiable
     {
-        return (await JsonSerializer.DeserializeAsync<IEnumerable<T>>(response))?.ToList() ?? new List<T>();
+        return (await JsonSerializer.DeserializeAsync<IEnumerable<T>>(response, SerializerOptions))?.ToList()
+               ?? new List<T>();
     }
 }
