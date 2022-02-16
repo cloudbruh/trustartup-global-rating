@@ -22,7 +22,7 @@ public class Retriever
     {
         using var client = new HttpClient();
 
-        Task<Stream> response = client.GetStreamAsync($"{_feedContentSystemUrl}/api/startup/");
+        Task<Stream> response = client.GetStreamAsync($"{_feedContentSystemUrl}/api/startup/?count=-1");
 
         return await DeserializeInput<StartupRawDto>(await response);
     }
