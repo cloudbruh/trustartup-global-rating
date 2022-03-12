@@ -1,0 +1,9 @@
+services:
+  global-rating:
+    build: .
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - Settings__FeedContentSystemUrl=http://host.docker.internal:8081
+      - Settings__RatingCalculationSystemUrl=http://host.docker.internal:8082
